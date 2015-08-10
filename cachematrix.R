@@ -1,5 +1,7 @@
 ## This pair of functions is able to calculate and store 
 ## the inverse of a matrix for faster access.
+## The matrix is assumed to be invertible.
+
 
 ## This function creates a special "matrix" object that can cache its inverse.
 
@@ -14,6 +16,7 @@ makeCacheMatrix <- function(x = matrix()) {
         setinverse <- function(solve) inverse <<- solve
         getinverse <- function() inverse 
         
+        ## Saves the objects into the list.
         list(set = set, get = get, 
              setinverse = setinverse,
              getinverse = getinverse)
@@ -24,15 +27,17 @@ makeCacheMatrix <- function(x = matrix()) {
 ## been calculated (and the matrix has not changed), then cacheSolve 
 ## should retrieve the inverse from the cache.
 
-## The matrix is assumed to be invertible.
-
 cacheSolve <- function(z, ...) {
 
         inverse <- z$getinverse()
+        
+        ## Checks if cached value exists and returns it.
         if(!is.null(inverse)) {
                 message("Getting cached solution")
                 return(inverse)
         }
+        
+        ## Solves, stores and returns the inverse value otherwise.
         inverse <- solve(z$get(), ...)
         z$setinverse(inverse)
         inverse
